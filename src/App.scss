@@ -1,0 +1,251 @@
+:root {
+  --tgBlue: rgb(38, 164, 227);
+  --gaGeen: #3b9702;
+  --turquoise: #35cbe3;
+}
+
+.appname {
+  margin: 0 0.5em;
+  font-size: 1.25em;
+  font-weight: bold;
+}
+
+.logo {
+  margin: 0;
+  display: flex;
+  align-items: center;
+  // gap: 1em;
+  // justify-content: center;
+
+  &::before {
+    content: url("../src/assets/g_white.svg");
+    background: var(--gaGeen);
+    border-radius: 50%;
+  }
+  &::after {
+    content: url("../src/assets/plane.svg");
+  }
+  &::before,
+  &::after {
+    width: 2em;
+    height: 2em;
+  }
+  .hero {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 0 1em;
+  }
+}
+
+.header {
+  background: white;
+  padding: 1.5em 3em;
+}
+
+.geenapi {
+  color: var(--gaGeen);
+}
+.telegram {
+  color: var(--tgBlue);
+}
+
+.header {
+  background: white;
+  padding: 1em 3em;
+}
+
+main {
+  display: flex;
+  gap: 5vw;
+  flex: 1; /* занимает всё доступное пространство внутри #root */
+  min-height: 0; /* разрешает flex-элементу сжиматься */
+  overflow: hidden; /* не вылезет за пределы #root */
+  padding: 2em;
+}
+
+@mixin rounded {
+  border-radius: 2em;
+  background: white;
+}
+
+@mixin button {
+  border-radius: 2em;
+  border: 1px solid;
+  padding: 1em;
+  &:enabled {
+    color: white;
+    background: var(--tgBlue);
+    font-weight: bold;
+    cursor: pointer;
+  }
+}
+@mixin input {
+  border-radius: 2em;
+  background: #eee;
+  border: none;
+  outline: none;
+  &:focus {
+    outline: 2px solid var(--tgBlue);
+    background-color: unset;
+  }
+}
+
+.chatsList {
+  flex: 1;
+  @include rounded();
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+  padding: 1em 1em 0;
+  li {
+    padding: 0.5em;
+    cursor: pointer;
+    border-radius: 1em;
+    display: flex;
+    align-items: center;
+    gap: 1em;
+    &.active {
+      font-weight: bold;
+      background-color: var(--tgBlue);
+      &:hover {
+        background-color: var(--tgBlue);
+      }
+    }
+
+    &:hover {
+      background-color: #eee;
+    }
+    .avatar {
+      width: 3em;
+      height: 3em;
+      border-radius: 50%;
+      overflow: hidden;
+      img {
+        width: 100%;
+      }
+    }
+    .name {
+    }
+  }
+  .addChat {
+    margin: 0;
+    display: flex;
+    gap: 1em;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    input {
+      padding: 1em;
+      flex: 1;
+      @include input();
+    }
+    button {
+      @include button();
+    }
+  }
+  ul {
+    min-height: 0;
+    overflow-y: auto;
+    scrollbar-width: thin;
+  }
+}
+
+.chatScreen {
+  flex: 2;
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+  min-height: 0; /* ! */
+  height: 100%;
+  .chatName {
+    @include rounded();
+    margin: 0;
+    padding: 1em;
+    flex-shrink: 0;
+  }
+  .chatScreenMessages {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5em;
+    min-height: 0;
+    overflow-y: auto;
+
+    scrollbar-width: none;
+
+    li {
+      @include rounded();
+      border-radius: 1em;
+      padding: 0.5em;
+      flex-shrink: 0; /* сообщения не должны сплющиваться */
+      &.incoming {
+        border-bottom-left-radius: 0;
+        align-self: flex-start;
+      }
+      &.outgoing {
+        border-bottom-right-radius: 0;
+        background-color: #eeffde;
+        align-self: flex-end;
+      }
+    }
+    &::before {
+      content: "";
+      margin-top: auto; /* работает как justify-content: end (занимает всё свободное пространство, толкая сообщения вниз), но не ломает появление прокрутки */
+    }
+  }
+  .messageInput {
+    @include rounded();
+    display: flex;
+    justify-content: space-between;
+    gap: 1em;
+    padding: 1em;
+    flex-shrink: 0; /* запрещаем полю ввода сжиматься */
+    #messageInput {
+      flex: 1;
+      border: none;
+      outline: none;
+      resize: none; /* запрещаем растягивать textarea мышкой, чтобы не сломать вёрстку */
+    }
+    button {
+      @include button();
+    }
+  }
+}
+
+.connection {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: white;
+  align-self: center;
+  padding: 3em;
+  gap: 3em;
+  border-radius: 2em;
+  color: #333;
+  width: clamp(500px, 40%, 600px);
+  margin: 4em auto;
+  @include rounded();
+  form {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    gap: 0.25em;
+    label {
+      margin-top: 1em;
+    }
+
+    input {
+      padding: 1em;
+      @include rounded();
+      @include input();
+    }
+    button {
+      @include button();
+      margin: 2em 0 1em;
+    }
+    a {
+      color: inherit;
+    }
+  }
+}
