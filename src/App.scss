@@ -8,6 +8,7 @@
   margin: 0 0.5em;
   font-size: 1.25em;
   font-weight: bold;
+  text-align: center;
 }
 
 .logo {
@@ -38,9 +39,32 @@
   }
 }
 
-.header {
+header {
   background: white;
-  padding: 1.5em 3em;
+  padding: 1em 3em;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1em;
+  .instance {
+    display: flex;
+    flex-direction: column;
+    align-items: end;
+    gap: 0.5em;
+    text-align: right;
+    .exitLink {
+      background: transparent;
+      font-size: 1em;
+      border: none;
+      border-bottom: 1px solid;
+      padding: 0;
+      cursor: pointer;
+      &:hover {
+        color: rgb(177, 9, 93);
+        border-bottom-color: transparent;
+      }
+    }
+  }
 }
 
 .geenapi {
@@ -122,6 +146,7 @@ main {
       height: 3em;
       border-radius: 50%;
       overflow: hidden;
+      flex-shrink: 0;
       img {
         width: 100%;
       }

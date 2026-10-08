@@ -12,12 +12,72 @@ import {
 
 type ChatAppProps = {
   credentials: Credentials;
+  onLogout: () => void;
 };
 
-function ChatApp({ credentials }: ChatAppProps) {
-  const [chats, setChats] = useState<Chat[]>([]);
-  const [selectedChatId, setSelectedChatId] = useState<string | null>(null);
-  const [messages, setMessages] = useState<Message[]>([]);
+function ChatApp({ credentials, onLogout }: ChatAppProps) {
+  const chatsStorageKey = `greenApiChats_${credentials.idInstance}`;
+  const selectedChatStorageKey = `greenApiSelectedChatId_${credentials.idInstance}`;
+  const messagesStorageKey = `greenApiMessages_${credentials.idInstance}`;
+
+  const [chats, setChats] = useState<Chat[]>(() => {
+    const savedChats = localStorage.getItem("greenApiChats");
+    // const savedChats = localStorage.getItem(chatsStorageKey);
+
+    if (!savedChats) {
+      return [];
+    }
+
+    try {
+      return JSON.parse(savedChats);
+    } catch {
+      localStorage.removeItem("greenApiChats");
+      // localStorage.removeItem(chatsStorageKey);
+      return [];
+    }
+  });
+
+  useEffect(() => {
+    // localStorage.setItem("greenApiChats", JSON.stringify(chats));
+    localStorage.setItem(chatsStorageKey, JSON.stringify(chats));
+  }, [chats]);
+
+  const [selectedChatId, setSelectedChatId] = useState<string | null>(() => {
+    // return localStorage.getItem("greenApiSelectedChatId");
+    return localStorage.getItem(selectedChatStorageKey);
+  });
+
+  useEffect(() => {
+    if (selectedChatId) {
+      // localStorage.setItem("greenApiSelectedChatId", selectedChatId);
+      localStorage.setItem(selectedChatStorageKey, selectedChatId);
+    } else {
+      // localStorage.removeItem("greenApiSelectedChatId");
+      localStorage.removeItem(selectedChatStorageKey);
+    }
+  }, [selectedChatId]);
+
+  const [messages, setMessages] = useState<Message[]>(() => {
+    // const savedMessages = localStorage.getItem("greenApiMessages");
+    const savedMessages = localStorage.getItem(messagesStorageKey);
+
+    if (!savedMessages) {
+      return [];
+    }
+
+    try {
+      return JSON.parse(savedMessages);
+    } catch {
+      // localStorage.removeItem("greenApiMessages");
+      localStorage.removeItem(messagesStorageKey);
+      return [];
+    }
+  });
+
+  useEffect(() => {
+    // localStorage.setItem("greenApiMessages", JSON.stringify(messages));
+    localStorage.setItem(messagesStorageKey, JSON.stringify(messages));
+  }, [messages]);
 
   useEffect(() => {
     // компонент появился - запускаем polling:
@@ -83,11 +143,20 @@ function ChatApp({ credentials }: ChatAppProps) {
       <header>
         <div className="logo">
           <div className="appname">
-            <span className="geenapi">GREEN-API</span> for
+            <span className="geenapi">GREEN-API</span> for{" "}
             <span className="telegram">Telegram</span>
           </div>
         </div>
-        <div></div>
+        <div className="instance">
+          <span>Instance ID: {credentials.idInstance}</span>
+          <button
+            className="exitLink"
+            title="Выход из аккаунта GREEN-API"
+            onClick={onLogout}
+          >
+            Выйти
+          </button>
+        </div>
       </header>
       <main>
         <Chats
